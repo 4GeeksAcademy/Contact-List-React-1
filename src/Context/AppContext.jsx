@@ -3,50 +3,55 @@ import { useNavigate } from "react-router-dom";
 
 const AppContext = createContext();
 
-export const AppProvider = ({children}) => {
+export const AppProvider = ({ children }) => {
     const [newList, setNewList] = useState([]);
     const [userInput, setUserInput] = useState({});
     const navigate = useNavigate();
-    
-
+    const [editContact, setEditContact] = useState({});
 
     const createNewContact = () => {
-        const userInputsId = {...userInput, id: Math.random()}
-        setNewList(prev=> [...prev, userInputsId])
+        const userInputsId = { ...userInput, id: Math.random() }
+        setNewList(prev => [...prev, userInputsId])
     }
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
         createNewContact();
         navigate("/");
-        
-        
+
+
     }
     const handleGetUserInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        
-        setUserInput((prev)=> {
+
+        setUserInput((prev) => {
 
             const id = newList.length + 1
-            return {...prev,id,[name]:value}
+            return { ...prev, id, [name]: value }
         })
-        
+
+    }
+
+    const handleEditButton = (e) => {
+        const id = e.target.parentElement.id;
+        console.log(id);
     }
 
 
-    const store ={
+    const store = {
         newList,
-        userInput
+        userInput,
+        editContact
     }
-    const actions={
+    const actions = {
         handleOnSubmit,
         handleGetUserInput
     }
 
     console.log(store.newList)
     return (
-        <AppContext.Provider value={{store,actions}}>
+        <AppContext.Provider value={{ store, actions }}>
             {children}
         </AppContext.Provider>
     )
